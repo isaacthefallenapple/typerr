@@ -1,0 +1,6 @@
+github.com/isaacthefallenapple/ansi v0.0.0-20190605010946-f45b62800308 h1:uJr9XmwwutAnbYaYUZPEbDblJxcxXsIeolfv7ExtH0A=
+github.com/isaacthefallenapple/ansi v0.0.0-20190605010946-f45b62800308/go.mod h1:UAE4KQIsIUn4V0gQzXeAXfA21d4UdpjJWz+fPxZIH0k=
+github.com/isaacthefallenapple/unbuffered v0.0.0-20190605001831-9bb712cb5e77 h1:3L7dWYjY1ISEHgfo1ZPYKnkuGxKkdBv1uRF4MVUunAA=
+github.com/isaacthefallenapple/unbuffered v0.0.0-20190605001831-9bb712cb5e77/go.mod h1:thOYMCCGcxR0Nwkn/Y9tsI8vGy2Vah94RAX1s2s3LHo=
+golang.org/x/sys v0.0.0-20190602015325-4c4f7f33c9ed h1:uPxWBzB3+mlnjy9W58qY1j/cjyFjutgw/Vhan2zLy/A=
+golang.org/x/sys v0.0.0-20190602015325-4c4f7f33c9ed/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=

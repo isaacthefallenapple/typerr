@@ -12,6 +12,7 @@ import (
 	"github.com/isaacthefallenapple/typerr/internal/typing"
 	"github.com/isaacthefallenapple/unbuffered"
 	"io"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -22,25 +23,29 @@ var pathPtr = flag.String("f", "", "Use this file to train.")
 
 func main() {
 	flag.Parse()
-	path := filepath.Clean(*pathPtr)
+
+	path := *pathPtr
+
+	path = filepath.Clean(*pathPtr)
 	if !strings.HasSuffix(path, ".txt") {
-		fmt.Println("Not a text (.txt) file: ", path)
+		log.Println("Not a text (.txt) file: ", path)
 		return
 	}
-	f, err := os.OpenFile(path, os.O_RDONLY, 0400)
+	input, err := os.OpenFile(path, os.O_RDONLY, 0400)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
-	defer f.Close()
+	defer input.Close()
+
 	reset, err := unbuffered.SetUpConsole()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return
 	}
 	defer reset()
 
-	r := fromReader(f)
+	r := fromReader(input)
 	if err = r.err; err != nil {
 		fmt.Println(">", err)
 	}

@@ -14,6 +14,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
 	"time"
@@ -41,12 +42,12 @@ func main() {
 		path = filepath.Clean(*pathPtr)
 		if !strings.HasSuffix(path, ".txt") {
 			fmt.Println("Not a text (.txt) file: ", path)
-			return
+			os.Exit(1)
 		}
 		f, err := os.OpenFile(path, os.O_RDONLY, 0400)
 		if err != nil {
 			fmt.Println(err)
-			return
+			os.Exit(1)
 		}
 		defer f.Close()
 		input = f
@@ -54,12 +55,22 @@ func main() {
 		return
 	}
 
+	interruptions := make(chan os.Signal, 1)
+	signal.Notify(interruptions, os.Interrupt)
+
 	reset, err := unbuffered.SetUpConsole()
 	if err != nil {
 		log.Println(err)
-		return
+		os.Exit(1)
 	}
 	defer reset()
+
+	go func() {
+		for range interruptions {
+			reset()
+			os.Exit(1)
+		}
+	}()
 
 	r := fromReader(input)
 	if err = r.err; err != nil {

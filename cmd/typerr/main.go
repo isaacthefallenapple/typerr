@@ -19,24 +19,40 @@ import (
 	"time"
 )
 
-var pathPtr = flag.String("f", "", "Use this file to train.")
+var (
+	pathPtr   = flag.String("f", "", "Use this file to train.")
+	stringPtr = flag.String("s", "", "Use this string to train.")
+)
 
 func main() {
 	flag.Parse()
 
+	str := *stringPtr
 	path := *pathPtr
 
-	path = filepath.Clean(*pathPtr)
-	if !strings.HasSuffix(path, ".txt") {
-		log.Println("Not a text (.txt) file: ", path)
+	var input io.Reader
+	switch {
+	case len(str) > 0 && len(path) > 0:
+		fmt.Println("-s and -f are mutually exclusive.")
+		return
+	case len(str) > 0:
+		input = strings.NewReader(str)
+	case len(path) > 0:
+		path = filepath.Clean(*pathPtr)
+		if !strings.HasSuffix(path, ".txt") {
+			fmt.Println("Not a text (.txt) file: ", path)
+			return
+		}
+		f, err := os.OpenFile(path, os.O_RDONLY, 0400)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		defer f.Close()
+		input = f
+	default:
 		return
 	}
-	input, err := os.OpenFile(path, os.O_RDONLY, 0400)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer input.Close()
 
 	reset, err := unbuffered.SetUpConsole()
 	if err != nil {

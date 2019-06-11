@@ -15,12 +15,12 @@ func TypeLine(text string) (input string, n int, err error) {
 	i := 0
 	for i < len(text) {
 		c = rune(text[i])
-		switch char, _ := unbuffered.ReadRune(); char {
+		switch char, _ = unbuffered.ReadRune(); char {
 		case 13, 26:
 			input = string(inputBytes[:i])
 			err = fmt.Errorf("input terminated")
 			return
-		case 8, 10:
+		case 8, 10, 127:
 			if i > 0 {
 				i--
 				ansi.Term()
